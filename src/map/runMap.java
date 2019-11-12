@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import sample.GameController;
 import sample.GameField;
 
+import java.awt.font.ImageGraphicAttribute;
 import java.io.*;
 import java.util.Scanner;
 
@@ -28,58 +29,85 @@ public final class runMap extends Application {
 
     @Override
     public void start(Stage primaryStage){
-        double width = 640;
-        double height = 576;
-
-        Image image = new Image("graphics/BrickTile.png");
-        Image sandTile = new Image("graphics/SandTile.png");
+        double width = 1024;
+        double height = 512;
         Canvas canvas = new Canvas(width,height);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.drawImage(image,0,0,32,32);
-//        try{
-//            draw(gc);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
+
         draw(gc);
+        drawObject(gc);
         Scene scene = new Scene(new Group(canvas));
+
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tower Defenese");
         primaryStage.show();
     }
     public void draw(GraphicsContext gc) {
-        LargeMap largeMap = new LargeMap();
-        MapEditor mapEditor = new MapEditor(32,16,largeMap.getUserInput());
+        SmallMap smallMap = new SmallMap();
+        MapEditor mapEditor = new MapEditor(32,16,smallMap.getUserInput());
 
         try {
-            mapEditor.writeFile("Large Map");
+            mapEditor.writeFile("Small Map");
         }catch (Exception e){
             e.printStackTrace();
         }
 
         int[][] maparray = mapEditor.getMapArray();
+        int[][] objecArray = smallMap.placeTree();
 
         double w = 0, h=0;
         Image green = new Image("graphics/green.jpg");
-        Image gravelTile = new Image("graphics/GravelTile.png");
         Image sandTile = new Image("graphics/SandTile.png");
-        for(int i=0; i<maparray.length; i++){
+        Image soilImage = new Image("graphics/soil.jpg");
+
+        for(int i=0; i<16; i++){
             w=0;
-            for(int j=0; j<maparray[0].length; j++){
+            for(int j=0; j<32; j++){
                 if(maparray[i][j]==0){
-                    gc.drawImage(green,w,h,32,32);
+                    gc.drawImage(soilImage,w,h,32,32);
                     w+=32;
                 }
                 else {
                     gc.drawImage(sandTile,w,h,32,32);
                     w+=32;
                 }
-
             }
             h+=32;
         }
+    }
+    public void drawObject(GraphicsContext gc) {
+        SmallMap smallMap = new SmallMap();
+        MapEditor mapEditor = new MapEditor(32,16,smallMap.getUserInput());
 
+        try {
+            mapEditor.writeFile("Small Map");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        int[][] maparray = mapEditor.getMapArray();
+        int[][] objecArray = smallMap.placeTree();
+
+        double w = 0, h=0;
+
+        Image treeImage2 = new Image("graphics/tree.png");
+        Image churchImage = new Image("graphics/church1.png");
+
+
+        for(int i=0; i<16; i++){
+            w=0;
+            for(int j=0; j<32; j++){
+                if(objecArray[i][j]==4){
+                    gc.drawImage(treeImage2,w,h,64,64);
+                }
+                else if(objecArray[i][j]==5) {
+                    gc.drawImage(churchImage,w,h, 192,192);
+                }
+                w+=32;
+            }
+            h+=32;
+        }
     }
 
 }
