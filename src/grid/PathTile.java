@@ -1,6 +1,5 @@
 package grid;
 
-
 public class PathTile extends Tile{
 
     private PathTile nextTile;

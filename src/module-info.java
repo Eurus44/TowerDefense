@@ -1,10 +1,20 @@
-module towerDefense {
+module TD {
+    requires javafx.graphics;
+    requires javafx.base;
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
-    opens sample;
-    opens map;
-    opens grid;
+    requires javafx.media;
+    requires javafx.swing;
+
+
+    opens Assets;
+    opens background;
+    opens entity;
+    opens game;
     opens graphics;
-    opens mapSaves;
+    opens grid;
+    opens MapSave;
+    opens Object;
+
 }
